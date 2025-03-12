@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { FaArrowLeft } from "react-icons/fa";
@@ -58,15 +58,31 @@ export default function ComparisonPage() {
                 <th className="py-2 text-right">{selectedMushroom.replace(".png", "").replace("-", " ")}</th>
               </tr>
             </thead>
-            <tbody>
-              {Object.keys(yourMushroomData).map((key, index) => (
+          <tbody>
+            {Object.keys(yourMushroomData).map((key, index) => {
+              const [editableValues, setEditableValues] = useState(yourMushroomData);
+
+              const handleInputChange = (event, attribute) => {
+                setEditableValues({ ...editableValues, [attribute]: event.target.value });
+              };
+
+              return (
                 <tr key={index} className="border-b">
-                  <td className="py-2 text-left">{yourMushroomData[key]}</td>
-                  <td className="py-2 font-bold text-center pl-6">{key.replace(/([A-Z])/g, " $1")}</td> {/* Added pl-6 */}
+                  <td className="py-2 text-left">
+                    <input
+                      type="text"
+                      value={editableValues[key]}
+                      onChange={(e) => handleInputChange(e, key)}
+                      className="border border-gray-300 rounded px-2 py-1 w-full"
+                    />
+                  </td>
+                  <td className="py-2 font-bold text-center pl-6">{key.replace(/([A-Z])/g, " $1")}</td>
                   <td className="py-2 text-right">{comparedMushroomData[key]}</td>
                 </tr>
-              ))}
+              );
+            })}
           </tbody>
+
         </table>
       </div>
       <NavBar />
