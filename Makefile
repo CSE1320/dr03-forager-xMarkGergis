@@ -2,11 +2,11 @@
 ####################### Makefile Template ##############################
 ########################################################################
 # Student settings
-NAME = YOURNAME
-SID = YOURSID
-EMAIL = YOURUTAEMAIL
+NAME = MARK GERGIS
+SID = 1002036078
+EMAIL = mtg6078@mavs.uta.edu
 SEMESTER = SPRING2025
-PROJECT=PROJ03
+PROJECT= PROJ03
  
 
 ####### DO NOT EDIT BELOW THIS LINE!!! #########
