@@ -1,19 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const Filter = ({ onClose }) => {
-  const [selected, setSelected] = useState({
-    tag: "Favorites",
-    region: "Texas",
-    type: "Poisonous",
-  });
+const Filter = ({ onClose, onFilterChange, initialFilters }) => {
+  const [selected, setSelected] = useState(initialFilters || { tag: [], region: [], type: [] });
+
+  useEffect(() => {
+    if (initialFilters) {
+      setSelected(initialFilters);
+    }
+  }, [initialFilters]);
 
   const handleSelect = (category, item) => {
-    setSelected((prev) => ({
-      ...prev,
-      [category]: prev[category] === item ? null : item, 
-    }));
+    setSelected((prev) => {
+      const isSelected = prev[category].includes(item);
+      const updatedCategory = isSelected
+        ? prev[category].filter((i) => i !== item)
+        : [...prev[category], item];
+
+      const updatedFilters = { ...prev, [category]: updatedCategory };
+      onFilterChange(updatedFilters);
+      return updatedFilters;
+    });
   };
 
   const options = {
@@ -26,7 +34,7 @@ const Filter = ({ onClose }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
       <div className="bg-white p-4 rounded-xl w-72 shadow">
         <div className="flex justify-center relative">
-          <h2 className="text-lg font-bold text">FILTER</h2>
+          <h2 className="text-lg font-bold">FILTER</h2>
           <button onClick={onClose} className="absolute right-0">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -41,7 +49,7 @@ const Filter = ({ onClose }) => {
                 <button
                   key={item}
                   className={`px-2 py-1 text-xs rounded-full ${
-                    selected[category] === item ? "bg-[#589477] text-white" : "bg-gray-300 text-gray-700"
+                    selected[category].includes(item) ? "bg-[#589477] text-white" : "bg-gray-300 text-gray-700"
                   }`}
                   onClick={() => handleSelect(category, item)}
                 >
